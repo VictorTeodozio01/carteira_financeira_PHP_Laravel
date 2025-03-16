@@ -4,32 +4,26 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 
 
-Route::get('/', function () {
-    return response()->file(public_path('frontend/index.html'));
-});
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\TransacaoController;
+use App\Http\Controllers\DepositoController;
+use App\Http\Controllers\TransferenciaController;
 
-Route::get('/frontend/login.html', function () {
-    return response()->file(public_path('frontend/login.html'));
-});
+// Rotas de Autenticação
+Route::post('/cadastro', [UsuarioController::class, 'cadastrar']);
+Route::post('/login', [UsuarioController::class, 'login']);
 
-Route::get('/frontend/cadastro.html', function () {
-    return response()->file(public_path('frontend/cadastro.html'));
-});
+// Rotas de Transações
+Route::post('/depositar', [DepositoController::class, 'depositar']);
+Route::post('/transferir', [TransferenciaController::class, 'transferir']);
+Route::get('/transacoes', [TransacaoController::class, 'listarTransacoes']);
+Route::post('/reverter/{id}', [TransacaoController::class, 'reverter']);
 
-Route::get('/frontend/dashboard.html', function () {
-    return response()->file(public_path('frontend/dashboard.html'));
-});
-
-Route::get('/frontend/transacoes.html', function () {
-    return response()->file(public_path('frontend/transacoes.html'));
-});
-Route::get('/transacoes', [UsuarioController::class, 'listarTransacoes']);
-
-Route::get('/frontend/deposito.html', function () {
-    return response()->file(public_path('frontend/deposito.html'));
-});
-
-Route::get('/frontend/transferir.html', function () {
-    return response()->file(public_path('frontend/transferir.html'));
-
-});
+// Rotas de Páginas (Front-end)
+Route::view('/cadastro', 'cadastro');
+Route::view('/login', 'login');
+Route::view('/dashboard', 'dashboard');
+Route::view('/depositar', 'depositar');
+Route::view('/transferir', 'transferir');
+Route::view('/transacoes', 'transacoes');
+Route::view('/', 'index');

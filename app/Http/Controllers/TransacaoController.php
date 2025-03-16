@@ -91,4 +91,11 @@ class TransacaoController extends Controller
 
         return response()->json(['mensagem' => 'Transação revertida com sucesso.']);
     }
+    
+    public function listarTransacoes(Request $request)
+    {
+        $usuario = $request->user();
+        $transacoes = Transacao::where('usuario_id', $usuario->id)->get();
+        return response()->json(['transacoes' => $transacoes]);
+    }
 }

@@ -15,13 +15,13 @@ class UsuarioController extends Controller
             'email' => 'required|email|unique:usuarios,email',
             'senha' => 'required|min:6',
         ]);
-
+    
         $usuario = Usuario::create([
-            'nome' => $request->input('nome'),
-            'email' => $request->input('email'),
-            'senha' => Hash::make($request->input('senha')),
+            'nome' => $request->nome,
+            'email' => $request->email,
+            'password' => bcrypt($request->senha),
             'saldo' => 0,
-        ]);
+        ]); 
         return response()->json(['message' => 'Usuário cadastrado com sucesso!'], 201);
         
         $usuarioDestino = $request->input('usuario_destino');
