@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transacao;
-use App\Models\Usuario;
+use App\Models\User; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,12 +12,12 @@ class TransacaoController extends Controller
     public function deposito(Request $request)
     {
         $request->validate([
-            'usuario_id' => 'required|exists:usuarios,id',
+            'usuario_id' => 'required|exists:users,id', 
             'valor' => 'required|numeric|min:0.01',
         ]);
 
         DB::transaction(function () use ($request) {
-            $usuario = Usuario::findOrFail($request->usuario_id);
+            $usuario = User::findOrFail($request->usuario_id); 
             $usuario->saldo += $request->valor;
             $usuario->save();
 
@@ -34,14 +34,14 @@ class TransacaoController extends Controller
     public function transferencia(Request $request)
     {
         $request->validate([
-            'usuario_id' => 'required|exists:usuarios,id',
-            'destinatario_id' => 'required|exists:usuarios,id|different:usuario_id',
+            'usuario_id' => 'required|exists:users,id', 
+            'destinatario_id' => 'required|exists:users,id|different:usuario_id', 
             'valor' => 'required|numeric|min:0.01',
         ]);
 
         DB::transaction(function () use ($request) {
-            $remetente = Usuario::findOrFail($request->usuario_id);
-            $destinatario = Usuario::findOrFail($request->destinatario_id);
+            $remetente = User::findOrFail($request->usuario_id); 
+            $destinatario = User::findOrFail($request->destinatario_id); 
 
             if ($remetente->saldo < $request->valor) {
                 abort(400, 'Saldo insuficiente.');
@@ -73,12 +73,12 @@ class TransacaoController extends Controller
         }
 
         DB::transaction(function () use ($transacao) {
-            $usuario = Usuario::findOrFail($transacao->usuario_id);
+            $usuario = User::findOrFail($transacao->usuario_id); 
 
             if ($transacao->tipo === 'deposito') {
                 $usuario->saldo -= $transacao->valor;
             } elseif ($transacao->tipo === 'transferencia') {
-                $destinatario = Usuario::findOrFail($transacao->destinatario_id);
+                $destinatario = User::findOrFail($transacao->destinatario_id); 
                 $usuario->saldo += $transacao->valor;
                 $destinatario->saldo -= $transacao->valor;
                 $destinatario->save();
@@ -91,7 +91,7 @@ class TransacaoController extends Controller
 
         return response()->json(['mensagem' => 'Transação revertida com sucesso.']);
     }
-    
+
     public function listarTransacoes(Request $request)
     {
         $usuario = $request->user();

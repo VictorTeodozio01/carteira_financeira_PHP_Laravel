@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DepositoController extends Controller
@@ -11,10 +11,10 @@ class DepositoController extends Controller
     {
         $request->validate([
             'valor' => 'required|numeric|min:1',
-            'usuario_id' => 'required|exists:usuarios,id',
+            'usuario_id' => 'required|exists:users,id', 
         ]);
 
-        $usuario = Usuario::find($request->usuario_id);
+        $usuario = User::find($request->usuario_id); 
         $valor = $request->valor;
 
         $usuario->saldo += $valor;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\User; 
 use Illuminate\Http\Request;
 
 class TransferenciaController extends Controller
@@ -11,12 +11,12 @@ class TransferenciaController extends Controller
     {
         $request->validate([
             'valor' => 'required|numeric|min:1',
-            'usuario_de' => 'required|exists:usuarios,id',
-            'usuario_para' => 'required|exists:usuarios,id',
+            'usuario_de' => 'required|exists:users,id', 
+            'usuario_para' => 'required|exists:users,id', 
         ]);
 
-        $usuario_de = Usuario::find($request->usuario_de);
-        $usuario_para = Usuario::find($request->usuario_para);
+        $usuario_de = User::find($request->usuario_de); 
+        $usuario_para = User::find($request->usuario_para); 
         $valor = $request->valor;
 
         if ($usuario_de->saldo < $valor) {
