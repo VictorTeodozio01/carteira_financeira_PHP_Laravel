@@ -11,10 +11,9 @@ class DepositoController extends Controller
     {
         $request->validate([
             'valor' => 'required|numeric|min:1',
-            'usuario_id' => 'required|exists:users,id', 
         ]);
 
-        $usuario = User::find($request->usuario_id); 
+        $usuario = $request->user();
         $valor = $request->valor;
 
         $usuario->saldo += $valor;

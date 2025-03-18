@@ -49,15 +49,18 @@
             fetch('http://127.0.0.1:8000/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     name: name,
                     email: email,
                     password: password,
                     password_confirmation: passwordConfirmation,
+                    _token: csrfToken
                 }),
+                credentials: 'include'
             })
             .then(response => {
                 if (!response.ok) {

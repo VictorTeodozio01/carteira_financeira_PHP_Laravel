@@ -28,7 +28,7 @@ class TransacaoController extends Controller
             ]);
         });
 
-        return response()->json(['mensagem' => 'Depósito realizado com sucesso.']);
+        return response()->json(['mensagem' => 'Depósito realizado com sucesso']);
     }
 
     public function transferencia(Request $request)
@@ -44,7 +44,7 @@ class TransacaoController extends Controller
             $destinatario = User::findOrFail($request->destinatario_id); 
 
             if ($remetente->saldo < $request->valor) {
-                abort(400, 'Saldo insuficiente.');
+                abort(400, 'Saldo insuficiente para realizar a transferência');
             }
 
             $remetente->saldo -= $request->valor;
@@ -61,7 +61,7 @@ class TransacaoController extends Controller
             ]);
         });
 
-        return response()->json(['mensagem' => 'Transferência realizada com sucesso.']);
+        return response()->json(['mensagem' => 'Transferência realizada com sucesso']);
     }
 
     public function reverter(Request $request, $id)
@@ -69,7 +69,7 @@ class TransacaoController extends Controller
         $transacao = Transacao::findOrFail($id);
 
         if ($transacao->revertida) {
-            return response()->json(['erro' => 'Transação já foi revertida.'], 400);
+            return response()->json(['erro' => 'Esta transação já foi revertida anteriormente'], 400);
         }
 
         DB::transaction(function () use ($transacao) {
@@ -89,7 +89,7 @@ class TransacaoController extends Controller
             $transacao->save();
         });
 
-        return response()->json(['mensagem' => 'Transação revertida com sucesso.']);
+        return response()->json(['mensagem' => 'Transação revertida com sucesso']);
     }
 
     public function listarTransacoes(Request $request)

@@ -40,19 +40,27 @@
             fetch('http://127.0.0.1:8000/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({
+                body: new URLSearchParams({
                     email: email,
                     password: password,
+                    _token: csrfToken
                 }),
+                credentials: 'include'
             })
             .then(response => {
                 if (!response.ok) {
-                    return response.json().then(err => { throw err; });
+                    return response.json().then(err => { 
+                        if (err.errors && err.errors.email) {
+                            throw new Error(err.errors.email[0]);
+                        }
+                        throw new Error(err.message || 'Erro no login');
+                    });
                 }
-                return null;
+                return response.json();
             })
             .then(() => {
                 document.getElementById('responseMessage').textContent = 'Login realizado com sucesso!';
@@ -63,11 +71,7 @@
                 }, 2000); 
             })
             .catch(error => {
-                if (error.message) {
-                    document.getElementById('responseMessage').textContent = "Erro no login: " + error.message;
-                } else {
-                    document.getElementById('responseMessage').textContent = "Erro no login: Credenciais inválidas";
-                }
+                document.getElementById('responseMessage').textContent = "Erro no login: " + error.message;
                 document.getElementById('responseMessage').classList.remove('text-success');
                 document.getElementById('responseMessage').classList.add('text-danger');
             });

@@ -11,13 +11,16 @@ class TransferenciaController extends Controller
     {
         $request->validate([
             'valor' => 'required|numeric|min:1',
-            'usuario_de' => 'required|exists:users,id', 
             'usuario_para' => 'required|exists:users,id', 
         ]);
 
-        $usuario_de = User::find($request->usuario_de); 
-        $usuario_para = User::find($request->usuario_para); 
+        $usuario_de = $request->user();
+        $usuario_para = User::find($request->usuario_para);
         $valor = $request->valor;
+
+        if ($usuario_de->id === $usuario_para->id) {
+            return response()->json(['message' => 'Não é possível transferir para si mesmo.'], 400);
+        }
 
         if ($usuario_de->saldo < $valor) {
             return response()->json(['message' => 'Saldo insuficiente.'], 400);
@@ -30,8 +33,7 @@ class TransferenciaController extends Controller
 
         return response()->json([
             'message' => 'Transferência realizada com sucesso!',
-            'saldo_usuario_de' => $usuario_de->saldo,
-            'saldo_usuario_para' => $usuario_para->saldo,
+            'saldo_atual' => $usuario_de->saldo,
         ], 200);
     }
 }
