@@ -7,7 +7,7 @@
 -Laravel <br/>
 -SQLite <br/>
 -Bootscrap <br/>
--Javassript <br/>
+-Javascript <br/>
 
 ## Credenciais:
 
