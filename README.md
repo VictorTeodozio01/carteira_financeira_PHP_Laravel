@@ -17,4 +17,25 @@ Email: exemplo@teste.com.br <br/>
 Senha: 12345678
 
 
-para testar faça o clone do repositorio e execute o seguinte comando: php artisan serve
+## Como testar:
+
+```bash
+# Faça o clone do repositório  
+# Copie o arquivo .env.example que está na raiz do projeto e depois renomeie para .env
+# Execute o seguinte comando também na raiz para gerar a key: 
+
+$ php artisan key:generate
+
+# Depois, execute o seguinte comando para rodar as Migrations: 
+
+$ php artisan migrate
+
+# Após os passos acima, execute o seguinte comando para rodar a aplicação:
+
+$ php artisan serve
+```
+ 
+
+
+
+
